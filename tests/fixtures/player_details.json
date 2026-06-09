@@ -1,0 +1,38 @@
+{
+  "data": {
+    "playerDetails": {
+      "healers": [],
+      "dps": [],
+      "tanks": [
+        {
+          "name": "Testchar",
+          "type": "Paladin",
+          "combatantInfo": {
+            "gear": [
+              { "id": 100, "slot": 0, "itemLevel": 120, "permanentEnchant": 2999, "permanentEnchantName": "+5 Parry and +5 Dodge" },
+              { "id": 101, "slot": 1, "itemLevel": 115 },
+              { "id": 102, "slot": 2, "itemLevel": 120, "permanentEnchant": 0 },
+              { "id": 0, "slot": 3, "itemLevel": 0 },
+              { "id": 104, "slot": 4, "itemLevel": 120, "permanentEnchant": 2661, "permanentEnchantName": "+4 All Stats" },
+              { "id": 105, "slot": 5, "itemLevel": 128 },
+              { "id": 106, "slot": 6, "itemLevel": 120, "permanentEnchant": 2748, "permanentEnchantName": "+2 Spell Power and +2 Stamina" },
+              { "id": 199, "slot": 6, "itemLevel": 100, "permanentEnchant": 0 },
+              { "id": 107, "slot": 7, "itemLevel": 110, "permanentEnchant": 0 },
+              { "id": 108, "slot": 8, "itemLevel": 110 },
+              { "id": 109, "slot": 9, "itemLevel": 133, "permanentEnchant": 2613, "permanentEnchantName": "+2% Threat" },
+              { "id": 110, "slot": 10, "itemLevel": 105, "permanentEnchant": 2928, "permanentEnchantName": "+12 Intellect" },
+              { "id": 111, "slot": 11, "itemLevel": 128, "permanentEnchant": 2928, "permanentEnchantName": "+12 Intellect" },
+              { "id": 112, "slot": 12, "itemLevel": 115 },
+              { "id": 113, "slot": 13, "itemLevel": 110 },
+              { "id": 114, "slot": 14, "itemLevel": 115, "permanentEnchant": 2622, "permanentEnchantName": "+3 Agility" },
+              { "id": 115, "slot": 15, "itemLevel": 100, "permanentEnchant": 2669, "permanentEnchantName": "+14 Spell Power" },
+              { "id": 116, "slot": 16, "itemLevel": 110, "permanentEnchant": 1071, "permanentEnchantName": "+6 Stamina" },
+              { "id": 117, "slot": 17, "itemLevel": 110 },
+              { "id": 118, "slot": 18, "itemLevel": 1 }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

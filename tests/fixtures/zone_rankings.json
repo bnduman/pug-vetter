@@ -1,0 +1,26 @@
+{
+  "bestPerformanceAverage": 82.5,
+  "medianPerformanceAverage": 60.0,
+  "zone": 1005,
+  "metric": "dps",
+  "rankings": [
+    {
+      "encounter": { "id": 709, "name": "The Prophet Skeram" },
+      "rankPercent": 88.0,
+      "totalKills": 10,
+      "report": { "code": "AbC123", "fightID": 3, "startTime": 1700000000000 }
+    },
+    {
+      "encounter": { "id": 711, "name": "Battleguard Sartura" },
+      "rankPercent": 75.0,
+      "totalKills": 5,
+      "report": { "code": "AbC123", "fightID": 7, "startTime": 1700000500000 }
+    },
+    {
+      "encounter": { "id": 717, "name": "C'Thun" },
+      "rankPercent": null,
+      "totalKills": 0,
+      "report": null
+    }
+  ]
+}
