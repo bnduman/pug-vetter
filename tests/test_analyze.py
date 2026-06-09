@@ -86,6 +86,24 @@ def test_analyze_gems_counts_sockets():
     assert by_slot["Feet"]["gems"] == 0      # slot absent entirely -> 0
 
 
+def test_analyze_enchant_name_override():
+    # WCL mislabels enchant id 369 as "+4 Intellect"; it's really +12 in TBC.
+    gear = [{"id": 1, "slot": 8, "itemLevel": 115,
+             "permanentEnchant": 369, "permanentEnchantName": "+4 Intellect"}]
+    en = analyze_enchants(gear)
+    wrist = next(s for s in en["slots"] if s["slot"] == "Wrist")
+    assert wrist["status"] == "enchanted"
+    assert wrist["enchant"] == "+12 Intellect"  # corrected, not WCL's "+4 Intellect"
+
+
+def test_analyze_enchant_name_falls_back_to_wcl():
+    # A non-overridden enchant keeps WCL's own name.
+    gear = [{"id": 1, "slot": 8, "itemLevel": 115,
+             "permanentEnchant": 2649, "permanentEnchantName": "+15 Spell Power"}]
+    wrist = next(s for s in analyze_enchants(gear)["slots"] if s["slot"] == "Wrist")
+    assert wrist["enchant"] == "+15 Spell Power"
+
+
 def test_analyze_gems_total_zero_when_none():
     gear = [{"id": 1, "slot": 0, "itemLevel": 120, "permanentEnchant": 5}]
     assert analyze_enchants(gear)["gems_total"] == 0

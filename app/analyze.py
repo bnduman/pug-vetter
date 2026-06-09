@@ -2,7 +2,7 @@
 
 No network or framework imports here, so this is the easy part to unit-test.
 """
-from .data.enchant_rules import ENCHANT_SLOTS, NON_ILVL_SLOTS
+from .data.enchant_rules import ENCHANT_NAME_OVERRIDES, ENCHANT_SLOTS, NON_ILVL_SLOTS
 
 
 def parse_color(pct):
@@ -119,9 +119,11 @@ def analyze_enchants(gear):
             continue
         ench_id = item.get("permanentEnchant") or 0
         if ench_id:
+            name = (ENCHANT_NAME_OVERRIDES.get(ench_id)
+                    or item.get("permanentEnchantName")
+                    or f"#{ench_id}")
             slots.append({"slot": rule["label"], "status": "enchanted",
-                          "enchant": item.get("permanentEnchantName") or f"#{ench_id}",
-                          "gems": gems, "required": rule["required"]})
+                          "enchant": name, "gems": gems, "required": rule["required"]})
         else:
             slots.append({"slot": rule["label"], "status": "missing",
                           "enchant": None, "gems": gems, "required": rule["required"]})

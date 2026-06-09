@@ -23,3 +23,12 @@ ENCHANT_SLOTS = [
 
 # Slots to ignore when averaging item level (cosmetic / no real ilvl).
 NON_ILVL_SLOTS = {3, 18}  # Shirt, Tabard
+
+# Warcraft Logs' "classic" tooltip DB mislabels some TBC enchants with their old
+# vanilla magnitudes (the enchant ID is reused across expansions but the value
+# was buffed in TBC). Map the WCL `permanentEnchant` id -> the correct TBC name
+# so the app doesn't under-report a properly enchanted character.
+# Verified against Wowhead TBC; add new entries here as they're found.
+ENCHANT_NAME_OVERRIDES = {
+    369: "+12 Intellect",  # Enchant Bracer - Major Intellect; WCL shows "+4 Intellect"
+}
