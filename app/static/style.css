@@ -39,7 +39,6 @@ input, select, button {
 }
 input:focus, select:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
 #name { flex: 2 1 220px; }
-#realm { flex: 1 1 160px; }
 button {
   background: var(--accent);
   color: #1a1a1a;
@@ -118,6 +117,14 @@ button:disabled { opacity: .55; cursor: default; }
 .summary-line b { font-size: 17px; }
 .warn { color: var(--bad); }
 .ok { color: var(--good); }
+.gem-total { color: var(--accent); font-weight: 700; }
+.chip .gem {
+  margin-left: 2px;
+  padding-left: 6px;
+  border-left: 1px solid var(--line);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
 
 .empty-state, .no-data {
   background: var(--panel);

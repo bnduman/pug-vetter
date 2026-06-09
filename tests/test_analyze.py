@@ -69,6 +69,28 @@ def test_analyze_enchants():
     assert by_slot["Legs"]["status"] == "enchanted"
 
 
+def test_analyze_gems_counts_sockets():
+    gear = [
+        {"id": 1, "slot": 0, "itemLevel": 120, "permanentEnchant": 5,
+         "gems": [{"id": 10}, {"id": 11}]},          # Head: enchanted, 2 gems
+        {"id": 2, "slot": 1, "itemLevel": 110, "gems": [{"id": 12}]},  # Neck: not an enchant slot, 1 gem
+        {"id": 3, "slot": 2, "itemLevel": 120, "permanentEnchant": 0},  # Shoulder: no gems key
+        {"id": 4, "slot": 6, "itemLevel": 120, "permanentEnchant": 7, "gems": []},  # Legs: empty gems list
+    ]
+    en = analyze_enchants(gear)
+    assert en["gems_total"] == 3  # 2 (head) + 1 (neck) + 0 + 0, across ALL gear
+    by_slot = {s["slot"]: s for s in en["slots"]}
+    assert by_slot["Head"]["gems"] == 2
+    assert by_slot["Shoulder"]["gems"] == 0  # missing key -> 0
+    assert by_slot["Legs"]["gems"] == 0      # empty list -> 0
+    assert by_slot["Feet"]["gems"] == 0      # slot absent entirely -> 0
+
+
+def test_analyze_gems_total_zero_when_none():
+    gear = [{"id": 1, "slot": 0, "itemLevel": 120, "permanentEnchant": 5}]
+    assert analyze_enchants(gear)["gems_total"] == 0
+
+
 def test_slugify_realm():
     assert slugify_realm("Living Flame") == "living-flame"
     assert slugify_realm("Nek'rosh") == "nekrosh"

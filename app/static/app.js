@@ -9,22 +9,20 @@ const btn = form.querySelector("button");
 
 const history = []; // {name, realm, region, label}
 
+// Realm/region are fixed to the server's defaults (Thunderstrike · EU), so the
+// form only asks for a character name.
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const name = document.getElementById("name").value.trim();
-  const realm = document.getElementById("realm").value.trim();
-  const region = document.getElementById("region").value;
-  if (name) lookup(name, realm, region);
+  if (name) lookup(name);
 });
 
-async function lookup(name, realm, region) {
+async function lookup(name) {
   setStatus(`Looking up ${name}…`);
   resultEl.innerHTML = "";
   btn.disabled = true;
   try {
     const params = new URLSearchParams({ name });
-    if (realm) params.set("realm", realm);
-    if (region) params.set("region", region);
     const resp = await fetch(`/api/vet?${params.toString()}`);
     const data = await resp.json();
     if (!resp.ok) {
@@ -33,7 +31,7 @@ async function lookup(name, realm, region) {
     }
     setStatus("");
     render(data);
-    addHistory(data, realm, region);
+    addHistory(data);
   } catch (err) {
     setStatus(`Request failed: ${err}`, true);
   } finally {
@@ -86,7 +84,7 @@ function render(data) {
     <div class="section-title">Raid clears &amp; best parse</div>
     ${raidRows || '<div class="meta">No raid ranking data.</div>'}
 
-    <div class="section-title">Enchants (from last logged gear)</div>
+    <div class="section-title">Enchants &amp; gems (from last logged gear)</div>
     ${renderEnchants(data.enchants)}
   </div>`;
 }
@@ -97,9 +95,12 @@ function renderEnchants(en) {
   }
   const missing = en.missing_required || 0;
   const ilvl = en.avg_item_level == null ? "—" : en.avg_item_level;
-  const head = missing === 0
-    ? `<div class="summary-line"><b class="ok">✔ Fully enchanted</b> &nbsp;·&nbsp; avg ilvl ${ilvl}</div>`
-    : `<div class="summary-line"><b class="warn">⚠ ${missing} missing enchant${missing > 1 ? "s" : ""}</b> &nbsp;·&nbsp; avg ilvl ${ilvl}</div>`;
+  const gems = en.gems_total || 0;
+  const gemTxt = `<span class="gem-total">💎 ${gems} gem${gems === 1 ? "" : "s"} socketed</span>`;
+  const enchTxt = missing === 0
+    ? `<b class="ok">✔ Fully enchanted</b>`
+    : `<b class="warn">⚠ ${missing} missing enchant${missing > 1 ? "s" : ""}</b>`;
+  const head = `<div class="summary-line">${enchTxt} &nbsp;·&nbsp; ${gemTxt} &nbsp;·&nbsp; avg ilvl ${ilvl}</div>`;
 
   const chips = (en.slots || []).map((s) => {
     let cls = "chip", icon = "", text = s.slot;
@@ -107,16 +108,16 @@ function renderEnchants(en) {
     else if (s.status === "missing") { cls += s.required ? " missing" : " missing optional"; icon = "✗"; text = `${s.slot}: none`; }
     else { cls += " empty"; icon = "·"; text = `${s.slot}: empty`; }
     if (!s.required) cls += " optional";
-    return `<span class="${cls}">${icon} ${text}${s.required ? "" : " (opt)"}</span>`;
+    const gemBadge = s.gems > 0 ? `<span class="gem">💎${s.gems}</span>` : "";
+    return `<span class="${cls}">${icon} ${text}${s.required ? "" : " (opt)"}${gemBadge}</span>`;
   }).join("");
 
   return head + `<div class="enchants">${chips}</div>`;
 }
 
-function addHistory(data, realm, region) {
-  const label = `${data.name} (${data.realm})`;
-  const entry = { name: data.name, realm: realm || data.realm, region: region || data.region, label,
-                  found: data.found };
+function addHistory(data) {
+  const label = data.name;
+  const entry = { name: data.name, realm: data.realm, region: data.region, label, found: data.found };
   // de-dupe
   const i = history.findIndex((h) => h.label.toLowerCase() === label.toLowerCase());
   if (i >= 0) history.splice(i, 1);
@@ -135,7 +136,5 @@ historyEl.addEventListener("click", (e) => {
   const h = history[Number(li.dataset.i)];
   if (!h) return;
   document.getElementById("name").value = h.name;
-  document.getElementById("realm").value = h.realm;
-  document.getElementById("region").value = h.region;
-  lookup(h.name, h.realm, h.region);
+  lookup(h.name);
 });

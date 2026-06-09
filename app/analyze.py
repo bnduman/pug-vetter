@@ -97,25 +97,34 @@ def _gear_by_slot(gear):
     return best
 
 
+def _gem_count(item):
+    """How many gems are socketed in an item. WCL lists socketed gems but does
+    NOT expose empty sockets, so this is a 'did they gem' signal, not a
+    per-socket audit."""
+    return len(item.get("gems") or []) if item else 0
+
+
 def analyze_enchants(gear):
-    """From a gear array, report enchant status per slot + average item level."""
+    """From a gear array, report enchant status + gem count per slot, the average
+    item level, and the total number of gems socketed across all gear."""
     by_slot = _gear_by_slot(gear)
     slots = []
     missing_required = 0
     for rule in ENCHANT_SLOTS:
         item = by_slot.get(rule["slot"])
+        gems = _gem_count(item)
         if not item or not item.get("id"):
             slots.append({"slot": rule["label"], "status": "empty",
-                          "enchant": None, "required": rule["required"]})
+                          "enchant": None, "gems": gems, "required": rule["required"]})
             continue
         ench_id = item.get("permanentEnchant") or 0
         if ench_id:
             slots.append({"slot": rule["label"], "status": "enchanted",
                           "enchant": item.get("permanentEnchantName") or f"#{ench_id}",
-                          "required": rule["required"]})
+                          "gems": gems, "required": rule["required"]})
         else:
             slots.append({"slot": rule["label"], "status": "missing",
-                          "enchant": None, "required": rule["required"]})
+                          "enchant": None, "gems": gems, "required": rule["required"]})
             if rule["required"]:
                 missing_required += 1
 
@@ -128,4 +137,8 @@ def analyze_enchants(gear):
             ilvls.append(lvl)
     avg_ilvl = round(sum(ilvls) / len(ilvls), 1) if ilvls else None
 
-    return {"slots": slots, "missing_required": missing_required, "avg_item_level": avg_ilvl}
+    # Total gems across all gear (rings/neck/etc. included, not just enchant slots).
+    gems_total = sum(_gem_count(item) for item in by_slot.values())
+
+    return {"slots": slots, "missing_required": missing_required,
+            "avg_item_level": avg_ilvl, "gems_total": gems_total}
