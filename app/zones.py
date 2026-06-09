@@ -5,7 +5,7 @@ import time
 
 from . import config  # noqa: F401  (ensures .env is loaded before any API call)
 from .data.raids import CURRENT_EXPANSION_ID, EXCLUDE_ZONE_PATTERNS, RAID_ZONE_IDS
-from .wcl_client import post_graphql
+from .wcl_client import WCLError, post_graphql
 
 EXPANSIONS_QUERY = """
 query {
@@ -61,14 +61,31 @@ def get_raid_zones() -> list[dict]:
             z = by_id.get(zid)
             if z:
                 raids.append({"id": zid, "name": z.get("name")})
+        if not raids:
+            raise WCLError(
+                f"None of RAID_ZONE_IDS {RAID_ZONE_IDS} matched a Warcraft Logs zone. "
+                "Run `python scripts/list_zones.py` and fix RAID_ZONE_IDS in app/data/raids.py."
+            )
     else:
         target = next((e for e in exps if e.get("id") == CURRENT_EXPANSION_ID), None)
-        if target:
-            for z in target.get("zones") or []:
-                if z.get("frozen") or _excluded(z.get("name") or ""):
-                    continue
-                raids.append({"id": z.get("id"), "name": z.get("name")})
+        if target is None:
+            known = ", ".join(f"{e.get('id')} ({e.get('name')})" for e in exps) or "none returned"
+            raise WCLError(
+                f"CURRENT_EXPANSION_ID={CURRENT_EXPANSION_ID} doesn't match any Warcraft Logs "
+                f"expansion (known: {known}). Anniversary realms may have advanced to the next "
+                "expansion — update CURRENT_EXPANSION_ID in app/data/raids.py."
+            )
+        for z in target.get("zones") or []:
+            if z.get("frozen") or _excluded(z.get("name") or ""):
+                continue
+            raids.append({"id": z.get("id"), "name": z.get("name")})
         raids.sort(key=lambda r: r["id"] or 0)
+        if not raids:
+            raise WCLError(
+                f"Expansion '{target.get('name')}' (id {CURRENT_EXPANSION_ID}) has no live raid "
+                "zones right now — they may all be frozen, or EXCLUDE_ZONE_PATTERNS is too broad. "
+                "Check app/data/raids.py."
+            )
 
     _cache["raids"] = raids
     _cache["ts"] = time.time()

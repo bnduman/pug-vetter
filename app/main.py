@@ -1,5 +1,7 @@
 """Flask app: serves the UI and the /api/vet JSON endpoint."""
+import threading
 import time
+from collections import OrderedDict
 from pathlib import Path
 
 from flask import Flask, jsonify, request, send_from_directory
@@ -20,18 +22,31 @@ STATIC = Path(__file__).resolve().parent / "static"
 app = Flask(__name__, static_folder=None)
 
 # --- tiny TTL cache so repeated invites don't re-hit the WCL rate limit ---
-_cache: dict[str, tuple[float, dict]] = {}
+# Thread-safe and bounded (LRU eviction) so a flood of distinct lookups can't
+# grow memory without limit or race the dict under a threaded WSGI server.
+_CACHE_MAX_ENTRIES = 500
+_cache: "OrderedDict[str, tuple[float, dict]]" = OrderedDict()
+_cache_lock = threading.Lock()
 
 
 def _cache_get(key: str):
-    hit = _cache.get(key)
-    if hit and time.time() - hit[0] < config.CACHE_TTL_SECONDS:
-        return hit[1]
-    return None
+    with _cache_lock:
+        hit = _cache.get(key)
+        if hit is None:
+            return None
+        if time.time() - hit[0] < config.CACHE_TTL_SECONDS:
+            _cache.move_to_end(key)  # mark most-recently-used
+            return hit[1]
+        del _cache[key]  # expired
+        return None
 
 
 def _cache_set(key: str, value: dict):
-    _cache[key] = (time.time(), value)
+    with _cache_lock:
+        _cache[key] = (time.time(), value)
+        _cache.move_to_end(key)
+        while len(_cache) > _CACHE_MAX_ENTRIES:
+            _cache.popitem(last=False)  # evict least-recently-used
 
 
 # --- routes ---
@@ -71,13 +86,9 @@ def vet():
 
 
 def _do_vet(name: str, realm: str, region: str) -> dict:
+    # get_raid_zones() raises a specific WCLError if no zones resolve (e.g. a
+    # stale CURRENT_EXPANSION_ID), so we never get an empty list here.
     zones = get_raid_zones()
-    if not zones:
-        raise WCLError(
-            "Couldn't resolve any raid zones from Warcraft Logs. Run "
-            "`python scripts/list_zones.py` and set RAID_ZONE_IDS in app/data/raids.py."
-        )
-
     zone_ids = [z["id"] for z in zones]
     query = build_character_query(zone_ids)
     data = post_graphql(
