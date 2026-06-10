@@ -13,7 +13,7 @@ from .analyze import (
     parse_color,
     summarize_zone,
 )
-from .queries import REPORT_FIGHTS_QUERY, REPORT_GEAR_QUERY, build_character_query
+from .queries import REPORT_GEAR_QUERY, build_character_query
 from .util import slugify_realm
 from .wcl_client import WCLError, post_graphql
 from .zones import get_raid_zones, list_all_zones
@@ -107,16 +107,18 @@ def _do_vet(name: str, realm: str, region: str) -> dict:
         summary["color"] = color
         raids.append(summary)
 
-    # Gear/enchants from the character's most recent logged raid.
+    # Gear/enchants from the character's most recent logged raid. The boss
+    # fight IDs already arrived with the character query (recentReports.fights).
     enchants = None
     last_log = None
     recent = ((char.get("recentReports") or {}).get("data")) or []
     if recent:
         last_log = recent[0].get("startTime")
         code = recent[0].get("code")
-        if code:
+        fight_ids = [f["id"] for f in recent[0].get("fights") or [] if f.get("id") is not None]
+        if code and fight_ids:
             try:
-                enchants = _fetch_enchants(code, name)
+                enchants = _fetch_enchants(code, fight_ids, name)
             except WCLError:
                 enchants = None  # gear is a bonus; never fail the lookup over it
 
@@ -132,17 +134,20 @@ def _do_vet(name: str, realm: str, region: str) -> dict:
     }
 
 
-def _fetch_enchants(report_code: str, char_name: str):
-    """Pull a character's gear from a report and analyze its enchants, or None."""
-    fdata = post_graphql(REPORT_FIGHTS_QUERY, {"code": report_code})
-    fights = ((fdata.get("reportData") or {}).get("report") or {}).get("fights") or []
-    fight_ids = [f["id"] for f in fights if f.get("id") is not None]
+def _fetch_enchants(report_code: str, fight_ids: list, char_name: str):
+    """Pull a character's gear from a report's boss fights and analyze it, or None."""
     if not fight_ids:
         return None
     gdata = post_graphql(REPORT_GEAR_QUERY, {"code": report_code, "fightIDs": fight_ids})
     details = ((gdata.get("reportData") or {}).get("report") or {}).get("playerDetails")
     gear = find_player_gear(details, char_name)
     return analyze_enchants(gear) if gear else None
+
+
+@app.get("/api/config")
+def api_config():
+    """Frontend bootstrap: which realm/region this instance is locked to."""
+    return jsonify({"realm": config.DEFAULT_REALM, "region": config.DEFAULT_REGION})
 
 
 @app.get("/api/zones")

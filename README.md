@@ -65,6 +65,15 @@ python run.py
 Then open <http://127.0.0.1:8000> in your browser. Type a name, hit **Vet**.
 Recent lookups are remembered for quick re-checks during invite spam.
 
+If you host it anywhere public, use the production server instead:
+`python serve.py` (waitress, listens on 0.0.0.0:8000).
+
+**Enchant names are TBC-correct.** Warcraft Logs' own enchant labels are
+retail-mangled for TBC (wrong magnitudes, renamed stats); the app maps enchant
+IDs to the real in-game names from the Anniversary client database
+([app/data/enchant_names.py](app/data/enchant_names.py)). When a new tier
+releases, refresh with `scripts/_harvest_enchants.py` + `scripts/_join_enchants.py`.
+
 ---
 
 ## Which raids it shows (and progressing tiers)

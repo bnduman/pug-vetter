@@ -9,8 +9,16 @@ const btn = form.querySelector("button");
 
 const history = []; // {name, realm, region, label}
 
-// Realm/region are fixed to the server's defaults (Thunderstrike · EU), so the
-// form only asks for a character name.
+// Realm/region are fixed to the server's configured defaults, so the form only
+// asks for a character name. Show which realm this instance is locked to.
+fetch("/api/config")
+  .then((r) => r.json())
+  .then((c) => {
+    document.getElementById("realm-label").textContent =
+      c.realm ? `${c.realm} (${c.region})` : "no realm configured — set DEFAULT_REALM in .env";
+  })
+  .catch(() => { document.getElementById("realm-label").textContent = ""; });
+
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const name = document.getElementById("name").value.trim();
@@ -54,7 +62,7 @@ function render(data) {
     resultEl.innerHTML = `<div class="no-data">
       <b>No logs found</b> for <b>${esc(data.name)}</b> on ${esc(data.realm)} (${esc(data.region)}).<br>
       They may simply have never been logged on Warcraft Logs &mdash; this is not proof they haven't raided.
-      Double-check the realm spelling and region.
+      Check the spelling of the name.
     </div>`;
     return;
   }
@@ -81,7 +89,7 @@ function render(data) {
     <h2>${esc(data.name)} <span class="meta" style="font-size:14px">${esc(data.realm)} · ${esc(data.region)}</span></h2>
     <div class="meta">Last logged raid: ${lastLog} &nbsp;·&nbsp; raids with a kill: ${totalCleared}/${raids.length}</div>
 
-    <div class="section-title">Raid clears &amp; best parse</div>
+    <div class="section-title">Raid clears &amp; best perf. average</div>
     ${raidRows || '<div class="meta">No raid ranking data.</div>'}
 
     <div class="section-title">Enchants &amp; gems (from last logged gear)</div>

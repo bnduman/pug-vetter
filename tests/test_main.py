@@ -149,19 +149,25 @@ def test_do_vet_builds_scorecard(monkeypatch):
             ],
             "bestPerformanceAverage": 80,
         },
-        "recentReports": {"data": [{"code": "abc123", "startTime": 1717000000000}]},
+        "recentReports": {"data": [{"code": "abc123", "startTime": 1717000000000,
+                                    "fights": [{"id": 3}, {"id": 9}]}]},
     }
     monkeypatch.setattr(main, "get_raid_zones", lambda: [{"id": 1007, "name": "Karazhan"}])
     monkeypatch.setattr(main, "post_graphql",
                         lambda *a, **k: {"characterData": {"character": char}})
-    monkeypatch.setattr(main, "_fetch_enchants",
-                        lambda code, name: {"missing_required": 1, "slots": [], "avg_item_level": 110.0})
+    seen_fights = []
+
+    def fake_enchants(code, fight_ids, name):
+        seen_fights.extend(fight_ids)
+        return {"missing_required": 1, "slots": [], "avg_item_level": 110.0}
+    monkeypatch.setattr(main, "_fetch_enchants", fake_enchants)
 
     out = main._do_vet("Foo", "Spineshatter", "US")
     assert out["found"] is True
     assert out["classID"] == 2
     assert out["last_log"] == 1717000000000
     assert out["enchants"]["missing_required"] == 1
+    assert seen_fights == [3, 9]  # fight IDs came from the character query
     (raid,) = out["raids"]
     assert raid["name"] == "Karazhan"
     assert raid["cleared"] == 1 and raid["total"] == 2
@@ -173,13 +179,13 @@ def test_do_vet_builds_scorecard(monkeypatch):
 def test_do_vet_swallows_enchant_failure(monkeypatch):
     char = {
         "name": "Foo", "classID": 2, "z1007": None,
-        "recentReports": {"data": [{"code": "abc", "startTime": 1}]},
+        "recentReports": {"data": [{"code": "abc", "startTime": 1, "fights": [{"id": 1}]}]},
     }
     monkeypatch.setattr(main, "get_raid_zones", lambda: [{"id": 1007, "name": "Karazhan"}])
     monkeypatch.setattr(main, "post_graphql",
                         lambda *a, **k: {"characterData": {"character": char}})
 
-    def boom(code, name):
+    def boom(code, fight_ids, name):
         raise WCLError("gear fetch failed")
     monkeypatch.setattr(main, "_fetch_enchants", boom)
 
@@ -208,29 +214,36 @@ def test_do_vet_propagates_zone_error(monkeypatch):
 # --- _fetch_enchants -------------------------------------------------------
 
 def test_fetch_enchants_no_fights_returns_none(monkeypatch):
-    monkeypatch.setattr(main, "post_graphql",
-                        lambda *a, **k: {"reportData": {"report": {"fights": []}}})
-    assert main._fetch_enchants("code", "Testchar") is None
+    def no_call(*a, **k):
+        raise AssertionError("should not query WCL when there are no fight IDs")
+    monkeypatch.setattr(main, "post_graphql", no_call)
+    assert main._fetch_enchants("code", [], "Testchar") is None
 
 
 def test_fetch_enchants_analyzes_real_gear(monkeypatch):
-    responses = iter([
-        {"reportData": {"report": {"fights": [{"id": 1}, {"id": 2}]}}},
-        {"reportData": {"report": {"playerDetails": load("player_details.json")}}},
-    ])
-    monkeypatch.setattr(main, "post_graphql", lambda *a, **k: next(responses))
-    en = main._fetch_enchants("code", "Testchar")
+    monkeypatch.setattr(
+        main, "post_graphql",
+        lambda *a, **k: {"reportData": {"report": {"playerDetails": load("player_details.json")}}})
+    en = main._fetch_enchants("code", [1, 2], "Testchar")
     assert en["missing_required"] == 3  # matches the analyze fixture (Shoulder/Wrist/Feet)
     assert en["avg_item_level"] == 115.8
 
 
 def test_fetch_enchants_unknown_player_returns_none(monkeypatch):
-    responses = iter([
-        {"reportData": {"report": {"fights": [{"id": 1}]}}},
-        {"reportData": {"report": {"playerDetails": load("player_details.json")}}},
-    ])
-    monkeypatch.setattr(main, "post_graphql", lambda *a, **k: next(responses))
-    assert main._fetch_enchants("code", "SomeoneElse") is None
+    monkeypatch.setattr(
+        main, "post_graphql",
+        lambda *a, **k: {"reportData": {"report": {"playerDetails": load("player_details.json")}}})
+    assert main._fetch_enchants("code", [1], "SomeoneElse") is None
+
+
+# --- /api/config -------------------------------------------------------------
+
+def test_api_config(client, monkeypatch):
+    monkeypatch.setattr(main.config, "DEFAULT_REALM", "Thunderstrike")
+    monkeypatch.setattr(main.config, "DEFAULT_REGION", "EU")
+    r = client.get("/api/config")
+    assert r.status_code == 200
+    assert r.get_json() == {"realm": "Thunderstrike", "region": "EU"}
 
 
 # --- index + /api/zones routes ---------------------------------------------

@@ -16,24 +16,16 @@ def build_character_query(zone_ids: list[int]) -> str:
         "      id\n"
         "      name\n"
         "      classID\n"
-        "      recentReports(limit: 1) { data { code startTime zone { id name } } }\n"
+        # fights are fetched here too (playerDetails needs fight IDs), saving a
+        # round-trip vs. querying the report separately.
+        "      recentReports(limit: 1) {\n"
+        "        data { code startTime fights(killType: Encounters) { id } }\n"
+        "      }\n"
         f"{aliases}\n"
         "    }\n"
         "  }\n"
         "}\n"
     )
-
-
-# Boss fights in a report (needed because playerDetails requires fight IDs).
-REPORT_FIGHTS_QUERY = """
-query($code: String!) {
-  reportData {
-    report(code: $code) {
-      fights(killType: Encounters) { id }
-    }
-  }
-}
-"""
 
 # Gear/enchants from combatant info across the given fights.
 REPORT_GEAR_QUERY = """

@@ -138,19 +138,36 @@ These cost real debugging time. They're encoded in the code, but know them:
    not array position. The array can hold multiple fights' gear, so we keep the
    highest-ilvl item per slot.
 
+7. **WCL's `permanentEnchantName` is retail-mangled — do not display it.**
+   It comes from a retail tooltip DB: retail-squished magnitudes and renamed
+   stats (ring "Spellpower +12 Spell Damage" shows as "+12 Intellect"; Spirit
+   shows as "Versatility", which doesn't exist in TBC). Of 77 enchant IDs
+   observed on ranked Anniversary players, **70 had wrong WCL names**. The fix:
+   `app/data/enchant_names.py` maps enchant ID → the real in-game name, sourced
+   from the Anniversary client's own SpellItemEnchantment table (wago.tools,
+   build 2.5.5.67852) and spot-verified on Wowhead `/tbc` spell pages. Refresh
+   pipeline when a new tier adds enchants:
+   `python scripts/_harvest_enchants.py` → `python scripts/_join_enchants.py`
+   → paste new IDs into `enchant_names.py`.
+
+8. **Fights ride along with the character query.** `recentReports.data[].fights
+   (killType: Encounters)` works inside the character query, so gear lookup
+   needs no separate fights round-trip (2 API calls per lookup total).
+
 ---
 
 ## 6. File map
 
 ```
-run.py                    launch the web app (python run.py)
+run.py                    launch locally (Flask dev server)
+serve.py                  launch for hosting (waitress, production WSGI)
 HANDOVER.md               this file
 README.md                 user-facing setup/usage
-requirements.txt          Flask, requests, pytest
+requirements.txt          Flask, requests, waitress, pytest
 .env.example              template; copy to .env (gitignored)
 app/
-  main.py                 Flask routes, /api/vet, TTL cache, gear fetch
-  wcl_client.py           OAuth token + GraphQL POST
+  main.py                 Flask routes, /api/vet, /api/config, TTL+LRU cache
+  wcl_client.py           OAuth token + GraphQL POST (429 retry, non-JSON guard)
   zones.py                resolve live raid zones from expansions
   queries.py              GraphQL query builders/strings
   analyze.py              pure: zoneRankings/gear JSON -> scorecard (tested)
@@ -159,8 +176,13 @@ app/
   data/
     raids.py              CURRENT_EXPANSION_ID + RAID_ZONE_IDS override
     enchant_rules.py      which slots must be enchanted (TBC-tuned)
+    enchant_names.py      enchant ID -> true TBC name (client DB; WCL's are wrong)
   static/                 index.html, app.js, style.css
-scripts/list_zones.py     prints all zones/expansions + live/frozen flags
+scripts/
+  list_zones.py           prints all zones/expansions + live/frozen flags
+  _harvest_enchants.py    step 1: collect enchant IDs in use from WCL rankings
+  _join_enchants.py       step 2: join vs client DB names (wago.tools)
+  _live_check.py          quick live lookup via the Flask test client
 tests/                    pytest + JSON fixtures (no network needed)
 ```
 

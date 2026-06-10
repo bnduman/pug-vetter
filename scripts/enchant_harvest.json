@@ -1,0 +1,620 @@
+[
+  {
+    "enchant_id": 2928,
+    "wcl_name": "+12 Intellect",
+    "slots": [
+      "Ring"
+    ],
+    "count": 116
+  },
+  {
+    "enchant_id": 2661,
+    "wcl_name": "+4 All Stats",
+    "slots": [
+      "Chest"
+    ],
+    "count": 102
+  },
+  {
+    "enchant_id": 2748,
+    "wcl_name": "+2 Spell Power and +2 Stamina",
+    "slots": [
+      "Legs"
+    ],
+    "count": 75
+  },
+  {
+    "enchant_id": 3002,
+    "wcl_name": "+7 Spell Power and +4 Critical Strike",
+    "slots": [
+      "Head"
+    ],
+    "count": 72
+  },
+  {
+    "enchant_id": 2650,
+    "wcl_name": "+3 Spell Power",
+    "slots": [
+      "Wrist"
+    ],
+    "count": 66
+  },
+  {
+    "enchant_id": 2937,
+    "wcl_name": "+5 Spell Power",
+    "slots": [
+      "Hands"
+    ],
+    "count": 66
+  },
+  {
+    "enchant_id": 2669,
+    "wcl_name": "+14 Spell Power",
+    "slots": [
+      "MainHand"
+    ],
+    "count": 45
+  },
+  {
+    "enchant_id": 2982,
+    "wcl_name": "+2 Spell Power and +1 Critical Strike",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 40
+  },
+  {
+    "enchant_id": 2621,
+    "wcl_name": "2% Reduced Threat",
+    "slots": [
+      "Back"
+    ],
+    "count": 39
+  },
+  {
+    "enchant_id": 2940,
+    "wcl_name": "Minor Speed and +3 Stamina",
+    "slots": [
+      "Feet"
+    ],
+    "count": 38
+  },
+  {
+    "enchant_id": 2673,
+    "wcl_name": "Mongoose",
+    "slots": [
+      "MainHand",
+      "OffHand"
+    ],
+    "count": 38
+  },
+  {
+    "enchant_id": 3003,
+    "wcl_name": "+5 Attack Power and +5 Critical Strike",
+    "slots": [
+      "Head"
+    ],
+    "count": 32
+  },
+  {
+    "enchant_id": 368,
+    "wcl_name": "+12 Agility",
+    "slots": [
+      "Back"
+    ],
+    "count": 31
+  },
+  {
+    "enchant_id": 911,
+    "wcl_name": "Minor Speed Increase",
+    "slots": [
+      "Feet"
+    ],
+    "count": 29
+  },
+  {
+    "enchant_id": 2647,
+    "wcl_name": "+4 Strength",
+    "slots": [
+      "Wrist"
+    ],
+    "count": 25
+  },
+  {
+    "enchant_id": 2986,
+    "wcl_name": "+2 Attack Power and +1 Critical Strike",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 24
+  },
+  {
+    "enchant_id": 2657,
+    "wcl_name": "+3 Agility",
+    "slots": [
+      "Feet"
+    ],
+    "count": 22
+  },
+  {
+    "enchant_id": 3012,
+    "wcl_name": "+1 Attack Power and +2 Critical Strike",
+    "slots": [
+      "Legs"
+    ],
+    "count": 22
+  },
+  {
+    "enchant_id": 684,
+    "wcl_name": "+15 Strength",
+    "slots": [
+      "Hands"
+    ],
+    "count": 21
+  },
+  {
+    "enchant_id": 2654,
+    "wcl_name": "+4 Intellect",
+    "slots": [
+      "OffHand"
+    ],
+    "count": 17
+  },
+  {
+    "enchant_id": 2995,
+    "wcl_name": "+2 Critical Strike and +1 Spell Power",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 17
+  },
+  {
+    "enchant_id": 2617,
+    "wcl_name": "+3 Spell Power",
+    "slots": [
+      "Wrist"
+    ],
+    "count": 16
+  },
+  {
+    "enchant_id": 2672,
+    "wcl_name": "+8 Shadow and Frost Spell Power",
+    "slots": [
+      "MainHand"
+    ],
+    "count": 16
+  },
+  {
+    "enchant_id": 2649,
+    "wcl_name": "+4 Stamina",
+    "slots": [
+      "Feet",
+      "Wrist"
+    ],
+    "count": 15
+  },
+  {
+    "enchant_id": 2671,
+    "wcl_name": "+8 Arcane and Fire Spell Power",
+    "slots": [
+      "MainHand"
+    ],
+    "count": 15
+  },
+  {
+    "enchant_id": 3001,
+    "wcl_name": "+5 Intellect and +6 Versatility",
+    "slots": [
+      "Head"
+    ],
+    "count": 12
+  },
+  {
+    "enchant_id": 2746,
+    "wcl_name": "+2 Spell Power and +2 Stamina",
+    "slots": [
+      "Legs"
+    ],
+    "count": 11
+  },
+  {
+    "enchant_id": 2322,
+    "wcl_name": "+5 Spell Power",
+    "slots": [
+      "Hands"
+    ],
+    "count": 11
+  },
+  {
+    "enchant_id": 2662,
+    "wcl_name": "+2 Armor",
+    "slots": [
+      "Back"
+    ],
+    "count": 11
+  },
+  {
+    "enchant_id": 1071,
+    "wcl_name": "+6 Stamina",
+    "slots": [
+      "OffHand"
+    ],
+    "count": 10
+  },
+  {
+    "enchant_id": 2564,
+    "wcl_name": "+3 Agility",
+    "slots": [
+      "Hands"
+    ],
+    "count": 10
+  },
+  {
+    "enchant_id": 2670,
+    "wcl_name": "+12 Agility",
+    "slots": [
+      "MainHand"
+    ],
+    "count": 10
+  },
+  {
+    "enchant_id": 2343,
+    "wcl_name": "+43 Spell Power",
+    "slots": [
+      "MainHand"
+    ],
+    "count": 9
+  },
+  {
+    "enchant_id": 2930,
+    "wcl_name": "+3 Intellect",
+    "slots": [
+      "Ring"
+    ],
+    "count": 8
+  },
+  {
+    "enchant_id": 3010,
+    "wcl_name": "+1 Attack Power and +2 Critical Strike",
+    "slots": [
+      "Legs"
+    ],
+    "count": 8
+  },
+  {
+    "enchant_id": 2929,
+    "wcl_name": "+2 Weapon Damage",
+    "slots": [
+      "Ring"
+    ],
+    "count": 8
+  },
+  {
+    "enchant_id": 2938,
+    "wcl_name": "+6 Primary Stat",
+    "slots": [
+      "Back"
+    ],
+    "count": 7
+  },
+  {
+    "enchant_id": 2935,
+    "wcl_name": "+5 Critical Strike",
+    "slots": [
+      "Hands"
+    ],
+    "count": 7
+  },
+  {
+    "enchant_id": 1593,
+    "wcl_name": "+12 Attack Power",
+    "slots": [
+      "Wrist"
+    ],
+    "count": 7
+  },
+  {
+    "enchant_id": 2659,
+    "wcl_name": "+42 Health",
+    "slots": [
+      "Chest"
+    ],
+    "count": 6
+  },
+  {
+    "enchant_id": 2622,
+    "wcl_name": "+3 Dodge",
+    "slots": [
+      "Back"
+    ],
+    "count": 6
+  },
+  {
+    "enchant_id": 2980,
+    "wcl_name": "+2 Intellect and +1 Versatility",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 6
+  },
+  {
+    "enchant_id": 2605,
+    "wcl_name": "+6 Spell Power",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 6
+  },
+  {
+    "enchant_id": 2939,
+    "wcl_name": "Minor Speed and +2 Agility",
+    "slots": [
+      "Feet"
+    ],
+    "count": 6
+  },
+  {
+    "enchant_id": 2933,
+    "wcl_name": "+3 Armor",
+    "slots": [
+      "Chest"
+    ],
+    "count": 5
+  },
+  {
+    "enchant_id": 369,
+    "wcl_name": "+4 Intellect",
+    "slots": [
+      "Wrist"
+    ],
+    "count": 4
+  },
+  {
+    "enchant_id": 2981,
+    "wcl_name": "+2 Spell Power",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 4
+  },
+  {
+    "enchant_id": 2979,
+    "wcl_name": "+2 Spell Power",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 4
+  },
+  {
+    "enchant_id": 3150,
+    "wcl_name": "+5 Versatility",
+    "slots": [
+      "Chest"
+    ],
+    "count": 4
+  },
+  {
+    "enchant_id": 2997,
+    "wcl_name": "+2 Critical Strike and +1 Attack Power",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 4
+  },
+  {
+    "enchant_id": 2724,
+    "wcl_name": "Scope (+11 Critical Strike)",
+    "slots": [
+      "Ranged"
+    ],
+    "count": 4
+  },
+  {
+    "enchant_id": 2721,
+    "wcl_name": "+6 Spell Power and +5 Critical Strike",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 3
+  },
+  {
+    "enchant_id": 2990,
+    "wcl_name": "+2 Dodge",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 3
+  },
+  {
+    "enchant_id": 3229,
+    "wcl_name": "+4 Armor",
+    "slots": [
+      "OffHand"
+    ],
+    "count": 3
+  },
+  {
+    "enchant_id": 2656,
+    "wcl_name": "+2 Versatility and +2 Stamina",
+    "slots": [
+      "Feet"
+    ],
+    "count": 3
+  },
+  {
+    "enchant_id": 2588,
+    "wcl_name": "+7 Spell Power and +3 Critical Strike",
+    "slots": [
+      "Head"
+    ],
+    "count": 3
+  },
+  {
+    "enchant_id": 2983,
+    "wcl_name": "+2 Attack Power",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 3
+  },
+  {
+    "enchant_id": 2614,
+    "wcl_name": "+4 Shadow Spell Power",
+    "slots": [
+      "Hands"
+    ],
+    "count": 2
+  },
+  {
+    "enchant_id": 929,
+    "wcl_name": "+4 Stamina",
+    "slots": [
+      "Feet"
+    ],
+    "count": 2
+  },
+  {
+    "enchant_id": 2613,
+    "wcl_name": "+2% Threat",
+    "slots": [
+      "Hands"
+    ],
+    "count": 2
+  },
+  {
+    "enchant_id": 2723,
+    "wcl_name": "Scope (+5 Damage)",
+    "slots": [
+      "Ranged"
+    ],
+    "count": 2
+  },
+  {
+    "enchant_id": 3013,
+    "wcl_name": "+2 Stamina and +2 Agility",
+    "slots": [
+      "Legs"
+    ],
+    "count": 2
+  },
+  {
+    "enchant_id": 884,
+    "wcl_name": "+2 Armor",
+    "slots": [
+      "Back"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 2747,
+    "wcl_name": "+2 Spell Power and +2 Stamina",
+    "slots": [
+      "Legs"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 2978,
+    "wcl_name": "+2 Dodge and +1 Stamina",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 2648,
+    "wcl_name": "+3 Dodge",
+    "slots": [
+      "Wrist"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 1144,
+    "wcl_name": "+15 Versatility",
+    "slots": [
+      "Chest"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 2992,
+    "wcl_name": "+2 Versatility",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 2999,
+    "wcl_name": "+5 Parry and +5 Dodge",
+    "slots": [
+      "Head"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 2655,
+    "wcl_name": "+2 Parry",
+    "slots": [
+      "OffHand"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 1441,
+    "wcl_name": "+5 Shadow Resistance",
+    "slots": [
+      "Back"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 2994,
+    "wcl_name": "+2 Critical Strike",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 2604,
+    "wcl_name": "+6 Spell Power",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 2745,
+    "wcl_name": "+2 Spell Power and +2 Stamina",
+    "slots": [
+      "Legs"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 2666,
+    "wcl_name": "+10 Intellect",
+    "slots": [
+      "MainHand"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 2717,
+    "wcl_name": "+5 Attack Power and +5 Critical Strike",
+    "slots": [
+      "Shoulder"
+    ],
+    "count": 1
+  },
+  {
+    "enchant_id": 1900,
+    "wcl_name": "Crusader",
+    "slots": [
+      "OffHand"
+    ],
+    "count": 1
+  }
+]

@@ -1,5 +1,6 @@
 Flask>=3.0
 requests>=2.31
+waitress>=3.0   # production WSGI server (serve.py)
 
 # dev / tests
 pytest>=8.0
